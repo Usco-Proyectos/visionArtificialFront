@@ -6,6 +6,7 @@ import { useAlertFeedback } from '../../../applications/hooks/useAlertFeedback';
 import { CAMERA_QUALITY } from '../../../constants/contanst';
 import { useDetection } from '../../../context/DetectionContext';
 import { AlertOverlay } from '../../../presentation/components/AlertOverlay';
+''
 
 type Props = NativeStackScreenProps<any, 'Detection'>;
 
@@ -13,11 +14,9 @@ export const DetectionScreen = ({ navigation }: Props) => {
   const { state, sendFrame } = useDetection();
   const cameraRef = useRef<CameraView>(null);
   const [permission] = useCameraPermissions();
-  const isActiveRef = useRef(true);  // ⭐ Flag para detener el loop al desmontar
-
+  const isActiveRef = useRef(true);  
   useAlertFeedback(state.veredicto);
 
-  // ⭐ Loop de captura CON CLEANUP SEGURO
   const startCapture = useCallback(async () => {
     while (isActiveRef.current && cameraRef.current) {
       try {
@@ -30,9 +29,8 @@ export const DetectionScreen = ({ navigation }: Props) => {
           sendFrame(photo.base64);
         }
       } catch (e) {
-        console.log('⚠️ Error capturando:', e);
+        console.log(' Error capturando:', e);
       }
-      // Espera 200ms entre fotos (5 FPS)
       await new Promise((r) => setTimeout(r, 200));
     }
   }, [sendFrame]);
@@ -40,15 +38,13 @@ export const DetectionScreen = ({ navigation }: Props) => {
   useEffect(() => {
     isActiveRef.current = true;
     
-    // Iniciar captura después de que la cámara esté lista
     const timer = setTimeout(() => {
-      console.log('📸 Iniciando captura de fotos');
+      console.log(' Iniciando captura de fotos');
       startCapture();
     }, 1000);
 
-    // ⭐ CLEANUP: detener el loop y desmontar limpiamente
     return () => {
-      console.log('🛑 Deteniendo captura (componente desmontado)');
+      console.log(' Deteniendo captura (componente desmontado)');
       isActiveRef.current = false;
       clearTimeout(timer);
     };
@@ -80,6 +76,8 @@ export const DetectionScreen = ({ navigation }: Props) => {
         probOjoIzq={state.probOjoIzq}
         probBostezo={state.probBostezo}
         probSomnolencia={state.probSomnolencia}
+        onContinue={() => {}}
+        onExit={() => navigation.replace('Home')}
       />
 
       <TouchableOpacity style={styles.exitButton} onPress={() => navigation.replace('Home')}>

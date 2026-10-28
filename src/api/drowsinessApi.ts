@@ -56,7 +56,7 @@ class DrowsinessApi {
           console.log(' Backend:', data.veredicto, data.regla_activada);
           if (!data.error) this.onMessage?.(data);
           
-           console.log('📡 Backend:', {
+           console.log(' Backend:', {
                 veredicto: data.veredicto,
                 regla: data.regla_activada,
                 rostro: data.rostro_detectado,

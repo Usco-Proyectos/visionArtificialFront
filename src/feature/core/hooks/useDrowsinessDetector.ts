@@ -54,14 +54,13 @@ export const useDrowsinessDetector = () => {
         });
       },
       (connected) => {
-        console.log(`📶 Estado de conexión: ${connected ? 'CONECTADO' : 'DESCONECTADO'}`);
+        console.log(` Estado de conexión: ${connected ? 'CONECTADO' : 'DESCONECTADO'}`);
         setState((prev) => ({ ...prev, conectado: connected }));
       }
     );
 
-    // ⭐ CLEANUP con log
     return () => {
-      console.log(`🔌 useDrowsinessDetector DESMONTADO (desconectando WS)`);
+      console.log(` useDrowsinessDetector DESMONTADO (desconectando WS)`);
       drowsinessApi.disconnect();
     };
   }, []);
